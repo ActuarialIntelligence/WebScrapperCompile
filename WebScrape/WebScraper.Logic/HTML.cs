@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RandomNameGeneratorLibrary;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -84,6 +85,30 @@ namespace WebScraper.Logic
                 innerTextList.Add(text);
             }
             return innerTextList;
+        }
+        /// <summary>
+        /// Randomly generate name and get a list of google search results for name+linkedin
+        /// then iterate through all of those values and retrieve data.
+        /// </summary>
+        /// <returns></returns>
+        public string[] GenerateRandomName()
+        {
+            var personGenerator = new PersonNameGenerator();
+            var name = personGenerator.GenerateRandomFirstAndLastName();
+            var nameSurname = name.Split(' ');
+            return nameSurname;
+        }
+
+        public string FormGoogleSearchUrl(string[] keyWords)
+        {
+            //https://www.google.co.za/search?q=James+Snow+LinkedIN&safe=active
+            var baseUrl = "https://www.google.co.za/search?q=";
+            var q = "";
+            foreach(var keyword in keyWords)
+            {
+                q += keyword;
+            }
+            return baseUrl + q + "&safe=active";
         }
     }
 }
