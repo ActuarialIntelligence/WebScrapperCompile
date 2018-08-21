@@ -52,14 +52,17 @@ namespace WebScraper.Logic
                 DictionaryFile = "en-US.dic"
             };
             oDict.Initialize();
-            string wordToCheck = "door";
-            NetSpell.SpellChecker.Spelling oSpell = new NetSpell.SpellChecker.Spelling
+            var words = html.Split(' ');
+            foreach (var wordToCheck in words)
             {
-                Dictionary = oDict
-            };
-            if (!oSpell.TestWord(wordToCheck) && wordToCheck.Length >= 5)
-            {
-                list.Add(wordToCheck);
+                NetSpell.SpellChecker.Spelling oSpell = new NetSpell.SpellChecker.Spelling
+                {
+                    Dictionary = oDict
+                };
+                if (!oSpell.TestWord(wordToCheck) && wordToCheck.Length >= 5)
+                {
+                    list.Add(wordToCheck);
+                }
             }
             return list;
         }
