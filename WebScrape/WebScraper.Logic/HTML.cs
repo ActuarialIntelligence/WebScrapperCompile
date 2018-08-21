@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Xml;
 
 namespace WebScraper.Logic
 {
@@ -65,6 +66,24 @@ namespace WebScraper.Logic
                 }
             }
             return list;
+        }
+        /// <summary>
+        /// visit media URL and verify against inner text.
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="nodeName"></param>
+        /// <returns></returns>
+        public IList<string> GetAllInnerTextByNode(string html, string nodeName)
+        {
+            var innerTextList = new List<string>();
+            var doc = new XmlDocument();
+            doc.Load(html);
+            foreach (XmlNode td in doc.DocumentElement.SelectNodes(nodeName))
+            {
+                string text = td.InnerText;
+                innerTextList.Add(text);
+            }
+            return innerTextList;
         }
     }
 }
