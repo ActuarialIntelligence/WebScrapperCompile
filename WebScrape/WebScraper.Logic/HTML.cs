@@ -113,16 +113,17 @@ namespace WebScraper.Logic
             return baseUrl + q + "&safe=active";
         }
 
-        public static IList<string> GetGoogleResultUrlsContainingKeyword(string url, string keyword)
+        public static IList<string> GetGoogleResultUrlsContainingKeyword(string url)
         {
             var urlList = new List<string>();
             var html = GetHTMLFromUrl(url);
             var split = html.Split('"');
             foreach(var str in split)
             {
-                if(str.Contains("https://") && str.Substring(0,5) =="https" && str.Contains(keyword))
+                if(str.Contains("https://www.linkedin.com"))
                 {
-                    urlList.Add(str);
+                    var withinSemicolon = str.Split(';')[0] == null ? "" : str.Split(';')[0];
+                    urlList.Add(withinSemicolon);
                 }
             }
             return urlList;

@@ -16,7 +16,13 @@ namespace WebScrape
             keywordsList.Add("CEO");
             keywordsList.Add("LinkedIn");
             var url = HTML.FormGoogleSearchUrl(keywordsList);
-            var results = HTML.GetGoogleResultUrlsContainingKeyword(url,"Linked");
+            var results = HTML.GetGoogleResultUrlsContainingKeyword(url);
+            var urlsList = new List<string>();
+            foreach(var res in results)
+            {
+                var removed = res.Replace("/url?q=", "");
+                urlsList.Add(removed);
+            }
         }
     }
 }
