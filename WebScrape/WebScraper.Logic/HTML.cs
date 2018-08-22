@@ -7,9 +7,9 @@ using System.Xml;
 
 namespace WebScraper.Logic
 {
-    public class HTML
+    public static class HTML
     {
-        public string GetHTMLFromUrl(string urlAddress)
+        public static string GetHTMLFromUrl(string urlAddress)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -36,7 +36,7 @@ namespace WebScraper.Logic
             return data;
         }
 
-        public bool CheckFor(string wordInHTML, string urlAddress)
+        public static bool CheckFor(string wordInHTML, string urlAddress)
         {
             var html = GetHTMLFromUrl(urlAddress);
             return html.Contains(wordInHTML) == true ? true : false;
@@ -46,7 +46,7 @@ namespace WebScraper.Logic
         /// </summary>
         /// <param name="html"></param>
         /// <returns></returns>
-        public IList<string> ReturnWordsThatAreNotInEnglishDictionary(string html)
+        public static IList<string> ReturnWordsThatAreNotInEnglishDictionary(string html)
         {
             var list = new List<string>();
             var oDict = new NetSpell.SpellChecker.Dictionary.WordDictionary
@@ -74,7 +74,7 @@ namespace WebScraper.Logic
         /// <param name="html"></param>
         /// <param name="nodeName"></param>
         /// <returns></returns>
-        public IList<string> GetAllInnerTextByNode(string html, string nodeName)
+        public static IList<string> GetAllInnerTextByNode(string html, string nodeName)
         {
             var innerTextList = new List<string>();
             var doc = new XmlDocument();
@@ -91,7 +91,7 @@ namespace WebScraper.Logic
         /// then iterate through all of those values and retrieve data.
         /// </summary>
         /// <returns></returns>
-        public string[] GenerateRandomName()
+        public static IList<string> GenerateRandomName()
         {
             var personGenerator = new PersonNameGenerator();
             var name = personGenerator.GenerateRandomFirstAndLastName();
@@ -99,16 +99,33 @@ namespace WebScraper.Logic
             return nameSurname;
         }
 
-        public string FormGoogleSearchUrl(string[] keyWords)
+        public static string FormGoogleSearchUrl(IList<string> keyWords)
         {
             //https://www.google.co.za/search?q=James+Snow+LinkedIN&safe=active
             var baseUrl = "https://www.google.co.za/search?q=";
             var q = "";
-            foreach(var keyword in keyWords)
+            var count = keyWords.Count;
+            var cnt = 0;
+            foreach (var keyword in keyWords)
             {
-                q += keyword;
+                q += cnt == count - 1 ? keyword : keyword + "+";
             }
             return baseUrl + q + "&safe=active";
+        }
+
+        public static IList<string> GetGoogleResultUrlsContainingKeyword(string url, string keyword)
+        {
+            var urlList = new List<string>();
+            var html = GetHTMLFromUrl(url);
+            var split = html.Split('"');
+            foreach(var str in split)
+            {
+                if(str.Contains("https://") && str.Substring(0,5) =="https" && str.Contains(keyword))
+                {
+                    urlList.Add(str);
+                }
+            }
+            return urlList;
         }
     }
 }
