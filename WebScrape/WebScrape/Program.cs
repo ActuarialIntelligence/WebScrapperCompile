@@ -17,7 +17,6 @@ namespace WebScrape
             keywordsList.Add("LinkedIn");
             var url = HTML.FormGoogleSearchUrl(keywordsList);
             var linkedInSearchResults = GetUrlList(url, "linkedin.com/in/");
-            var cnt = 0;
             var finalResultSet = new List<string>();
             foreach (var link in linkedInSearchResults)
             {
@@ -25,7 +24,11 @@ namespace WebScrape
                 {
                     finalResultSet.Add(link);
                 }
-                cnt++;
+            }
+            var rawHTML = new List<string>();
+            foreach (var link in finalResultSet)
+            {
+                rawHTML.Add(HTML.GetHTMLFromUrl(link));
             }
 
         }

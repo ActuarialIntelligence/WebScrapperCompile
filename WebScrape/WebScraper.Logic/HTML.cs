@@ -12,8 +12,9 @@ namespace WebScraper.Logic
     {
         public static string GetHTMLFromUrl(string urlAddress)
         {
-            try { 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             string data="";
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -41,8 +42,8 @@ namespace WebScraper.Logic
             {
                 return "";
             }
-           
-        }
+
+}
 
         public static bool CheckFor(string wordInHTML, string urlAddress)
         {
