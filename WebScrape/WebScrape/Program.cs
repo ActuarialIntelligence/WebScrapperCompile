@@ -16,12 +16,38 @@ namespace WebScrape
             keywordsList.Add("CEO");
             keywordsList.Add("LinkedIn");
             var url = HTML.FormGoogleSearchUrl(keywordsList);
-            var results = HTML.GetGoogleResultUrlsContainingKeyword(url);
-            var urlsList = new List<string>();
-            foreach(var res in results)
+            var linkedInSearchResults = GetUrlList(url, "linkedin.com/in/");
+            var cnt = 0;
+            var finalResultSet = new List<string>();
+            foreach (var link in linkedInSearchResults)
             {
-                var removed = res.Replace("/url?q=", "");
-                urlsList.Add(removed);
+                if(link.Substring(0,5)=="https")
+                {
+                    finalResultSet.Add(link);
+                }
+                cnt++;
+            }
+
+        }
+
+        private static IList<string> GetUrlList(string url, string keyword)
+        {
+            var urlsList = new List<string>();
+            if (url != "")
+            {
+                var results = HTML.GetGoogleResultUrlsContainingKeyword(url, keyword);
+                
+                foreach (var res in results)
+                {
+                    var removed = res.Replace("/url?q=", "");
+                    removed = removed.Replace("&amp", "");
+                    urlsList.Add(removed);
+                }
+                return urlsList;
+            }
+            else
+            {
+                return null;
             }
         }
     }

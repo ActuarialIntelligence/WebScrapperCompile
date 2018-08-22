@@ -1,4 +1,5 @@
 ﻿using RandomNameGeneratorLibrary;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -11,29 +12,36 @@ namespace WebScraper.Logic
     {
         public static string GetHTMLFromUrl(string urlAddress)
         {
+            try { 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlAddress);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             string data="";
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Stream receiveStream = response.GetResponseStream();
-                StreamReader readStream = null;
-
-                if (response.CharacterSet == null)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    readStream = new StreamReader(receiveStream);
-                }
-                else
-                {
-                    readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
-                }
+                    Stream receiveStream = response.GetResponseStream();
+                    StreamReader readStream = null;
 
-                 data = readStream.ReadToEnd();
+                    if (response.CharacterSet == null)
+                    {
+                        readStream = new StreamReader(receiveStream);
+                    }
+                    else
+                    {
+                        readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
+                    }
 
-                response.Close();
-                readStream.Close(); 
+                    data = readStream.ReadToEnd();
+
+                    response.Close();
+                    readStream.Close();
+                }
+                return data;
             }
-            return data;
+            catch(Exception)
+            {
+                return "";
+            }
+           
         }
 
         public static bool CheckFor(string wordInHTML, string urlAddress)
@@ -113,14 +121,14 @@ namespace WebScraper.Logic
             return baseUrl + q + "&safe=active";
         }
 
-        public static IList<string> GetGoogleResultUrlsContainingKeyword(string url)
+        public static IList<string> GetGoogleResultUrlsContainingKeyword(string url, string keyword)
         {
             var urlList = new List<string>();
             var html = GetHTMLFromUrl(url);
             var split = html.Split('"');
             foreach(var str in split)
             {
-                if(str.Contains("https://www.linkedin.com"))
+                if(str.Contains(keyword))
                 {
                     var withinSemicolon = str.Split(';')[0] == null ? "" : str.Split(';')[0];
                     urlList.Add(withinSemicolon);
