@@ -1,4 +1,5 @@
-﻿using RandomNameGeneratorLibrary;
+﻿using HtmlAgilityPack;
+using RandomNameGeneratorLibrary;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -83,16 +84,21 @@ namespace WebScraper.Logic
         /// <param name="html"></param>
         /// <param name="nodeName"></param>
         /// <returns></returns>
-        public static IList<string> GetAllInnerTextByNode(string html, string nodeName)
+        public static IList<string> GetAllInnerTextByNode(string url, string nodeName)
         {
             var innerTextList = new List<string>();
-            var doc = new XmlDocument();
-            doc.Load(html);
-            foreach (XmlNode td in doc.DocumentElement.SelectNodes(nodeName))
+            var html = GetHTMLFromUrl(url);
+
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var nodes = doc.DocumentNode.SelectNodes("//"+nodeName);
+            foreach(var node in nodes)
             {
-                string text = td.InnerText;
-                innerTextList.Add(text);
+                innerTextList.Add((node.InnerHtml));
             }
+            
+
             return innerTextList;
         }
         /// <summary>
@@ -137,5 +143,6 @@ namespace WebScraper.Logic
             }
             return urlList;
         }
+
     }
 }

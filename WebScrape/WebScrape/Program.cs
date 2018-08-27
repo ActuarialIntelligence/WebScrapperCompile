@@ -7,6 +7,7 @@ namespace WebScrape
     {
         static void Main(string[] args)
         {
+
             var nameAndSurname = HTML.GenerateRandomName();
             var keywordsList = new List<string>();
             foreach (var val in nameAndSurname)
@@ -25,12 +26,7 @@ namespace WebScrape
                     finalResultSet.Add(link);
                 }
             }
-            var rawHTML = new List<string>();
-            foreach (var link in finalResultSet)
-            {
-                rawHTML.Add(HTML.GetHTMLFromUrl(link));
-            }
-
+            var metaDataResults = HTML.GetAllInnerTextByNode(url, "span");
         }
 
         private static IList<string> GetUrlList(string url, string keyword)
