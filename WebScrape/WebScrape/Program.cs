@@ -7,8 +7,8 @@ namespace WebScrape
     {
         static void Main(string[] args)
         {
-
-            var nameAndSurname = HTML.GenerateRandomName();
+            var namesTest = new List<string>() { "Sathyandranath Iyer"};
+            var nameAndSurname = namesTest; //HTML.GenerateRandomName();
             var keywordsList = new List<string>();
             foreach (var val in nameAndSurname)
             {
